@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+   <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#151515" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドゥードルクリケット - 無料オンラインクリケットゲーム</title>
+    <meta name="description" content="ドゥードルクリケットで楽しい時間を過ごしましょう。無料でプレイできるオンラインクリケットゲームです。モバイル、タブレット、PCに対応。">
+    <meta name="keywords" content="ドゥードルクリケット, クリケットゲーム, オンラインゲーム, 無料ゲーム, スポーツゲーム">
+    <meta name="author" content="Doodle Cricket Japan">
+    <meta property="og:title" content="ドゥードルクリケット - 無料オンラインクリケットゲーム">
+    <meta property="og:description" content="ブラウザで楽しめる無料のクリケットゲーム。すぐにプレイ開始！">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Custom Cricket SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='grad1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2300ff88;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%230099ff;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='url(%23grad1)'/%3E%3Cpath d='M20 40 L44 16' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cellipse cx='22' cy='38' rx='3' ry='1.5' fill='%23fff'/%3E%3Cellipse cx='42' cy='18' rx='3' ry='1.5' fill='%23fff'/%3E%3Crect x='10' y='45' width='44' height='8' rx='4' fill='%23fff' opacity='0.9'/%3E%3Ccircle cx='48' cy='25' r='6' fill='%23ff4444' opacity='0.8'/%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            position: relative;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .game-header {
+            background: linear-gradient(90deg, #00c9ff 0%, #92fe9d 100%);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-title {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .fullscreen-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .game-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: block;
+        }
+
+        .ads-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px dashed #dee2e6;
+        }
+
+        .ads-placeholder {
+            background: linear-gradient(45deg, #f8f9fa 25%, transparent 25%), 
+                        linear-gradient(-45deg, #f8f9fa 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #f8f9fa 75%), 
+                        linear-gradient(-45deg, transparent 75%, #f8f9fa 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            height: 90px;
+            width: 728px;
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: 500;
+            border-radius: 10px;
+        }
+
+        .seo-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .seo-content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .seo-content h3 {
+            color: #34495e;
+            margin: 25px 0 15px 0;
+            font-size: 1.4rem;
+        }
+
+        .seo-content p {
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .game-iframe {
+                height: 400px;
+            }
+
+            .seo-content {
+                padding: 25px;
+            }
+
+            .game-header {
+                padding: 12px 15px;
+            }
+
+            .game-title {
+                font-size: 1rem;
+            }
+
+            .fullscreen-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .ads-container {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .ads-container {
+                display: none;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .ads-container {
+                display: block;
+            }
+        }
+
+        /* Fullscreen styles */
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 10000;
+            display: none;
+        }
+
+        .fullscreen-overlay.active {
+            display: block;
+        }
+
+        .fullscreen-overlay iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .close-fullscreen {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 10001;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+ <script>
+    if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sw.js')
+    .then(registration => {console.log('Service Worker registered successfully:', registration);})
+    .catch(error => {console.log('Error in Service Worker registration:', error);});});}
+    </script>
+    <div class="container">
+        <header>
+            <h1>🏏 ドゥードルクリケット</h1>
+            <p class="subtitle">最高のオンラインクリケット体験をお楽しみください！</p>
+        </header>
+
+        <div class="game-container">
+            <div class="game-header">
+                <div class="game-title">ゲームをプレイ</div>
+                <button class="fullscreen-btn" onclick="toggleFullscreen()">
+                    🔍 フルスクリーン
+                </button>
+            </div>
+            <iframe 
+                id="gameFrame"
+                class="game-iframe"
+                src="https://doodlecricketunblocked.netlify.app/"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- Fullscreen Overlay -->
+        <div id="fullscreenOverlay" class="fullscreen-overlay">
+            <button class="close-fullscreen" onclick="exitFullscreen()">
+                ❌ 閉じる
+            </button>
+            <iframe 
+                id="fullscreenFrame"
+                src="https://doodlecricketunblocked.netlify.app/"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+              <!-- PC Only Ads -->
+        <div class="ads-container">
+            <div class="ads-placeholder">
+               <script type="text/javascript">
+     atOptions = {
+       'key' : 'd1d26e15f7c349fd8e403bb5ea491a31',
+       'format' : 'iframe',
+       'height' : 90,
+       'width' : 728,
+       'params' : {}
+     };
+   </script>
+   <script type="text/javascript" src="//www.highperformanceformat.com/d1d26e15f7c349fd8e403bb5ea491a31/invoke.js"></script>
+            </div>
+        </div>
+
+        <div class="seo-content">
+            <h2>ドゥードルクリケットについて</h2>
+            <p>ドゥードルクリケットは、ブラウザで楽しめる最高のオンラインクリケットゲームです。シンプルで直感的な操作で、本格的なクリケット体験を味わうことができます。ダウンロード不要で、すぐにプレイを開始できます。</p>
+
+            <h3>🎮 ゲームの特徴</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>高速プレイ</h4>
+                    <p>素早い反応と正確な操作でスコアを伸ばそう</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h4>精密操作</h4>
+                    <p>タイミングを計って完璧なショットを決めよう</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h4>スコア競争</h4>
+                    <p>自分のベストスコアに挑戦し続けよう</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>全デバイス対応</h4>
+                    <p>PC、タブレット、スマートフォンで楽しめる</p>
+                </div>
+            </div>
+
+            <h3>🏏 プレイ方法</h3>
+            <p>ドゥードルクリケットは非常にシンプルな操作で楽しめます。画面をクリックまたはタップしてバッターを操作し、飛んでくるボールを正確にヒットしましょう。タイミングが重要で、完璧なタイミングでヒットすることで高得点を獲得できます。</p>
+
+            <h3>🌟 なぜドゥードルクリケットが人気なのか？</h3>
+            <p>ドゥードルクリケットの魅力は、そのシンプルさと奥深さにあります。誰でも簡単に始められる一方で、高得点を目指すには練習と技術が必要です。また、短時間でプレイできるため、休憩時間や通勤時間にも最適です。</p>
+
+            <h3>🎯 上達のコツ</h3>
+            <p>高得点を獲得するためには、ボールの軌道をよく観察し、適切なタイミングでクリックすることが重要です。慌てずに集中し、リズムを掴むことで徐々にスコアが向上していきます。継続的な練習が上達の鍵となります。</p>
+
+            <h3>🚀 今すぐプレイを始めよう！</h3>
+            <p>ドゥードルクリケットは完全無料でプレイできます。登録や複雑な設定は一切不要で、このページを開くだけですぐにゲームを楽しむことができます。友達や家族と一緒にスコアを競い合って楽しい時間を過ごしましょう！</p>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 ドゥードルクリケット Japan. すべての権利予約済み。</p>
+            <p>最高のオンラインクリケット体験をお届けします。</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleFullscreen() {
+            const overlay = document.getElementById('fullscreenOverlay');
+            const fullscreenFrame = document.getElementById('fullscreenFrame');
+            
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Reload iframe to ensure proper loading
+            fullscreenFrame.src = fullscreenFrame.src;
+        }
+
+        function exitFullscreen() {
+            const overlay = document.getElementById('fullscreenOverlay');
+            
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close fullscreen with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                exitFullscreen();
+            }
+        });
+
+        // Add some smooth scrolling behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading animation
+            const gameFrame = document.getElementById('gameFrame');
+            gameFrame.addEventListener('load', function() {
+                console.log('Game loaded successfully!');
+            });
+
+            // Add responsive behavior for ads
+            function handleResize() {
+                const adsContainer = document.querySelector('.ads-container');
+                if (window.innerWidth <= 1024) {
+                    adsContainer.style.display = 'none';
+                } else {
+                    adsContainer.style.display = 'block';
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Initial call
+        });
+
+        // Add smooth animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.feature-card, .seo-content');
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
